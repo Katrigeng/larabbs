@@ -37,6 +37,7 @@ class TopicsController extends Controller
 
 	public function store(TopicRequest $request, Topic $topic)
 	{
+        
         $topic->fill($request->all());
         $topic->user_id = Auth::id();
         $topic->save();
