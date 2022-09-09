@@ -9,11 +9,15 @@ use App\Http\Requests\TopicRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Handlers\ImageUploadHandler;
+use App\Handlers\SlugTranslateHandler;
 
 class TopicsController extends Controller
 {
     public function __construct()
     {
+        $aa = new SlugTranslateHandler();
+        $aa->translate("苹果");
+
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
