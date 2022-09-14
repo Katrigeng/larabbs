@@ -10,27 +10,30 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Handlers\ImageUploadHandler;
 use App\Handlers\SlugTranslateHandler;
+use Overtrue\Pinyin\Pinyin;
+use Illuminate\Support\Str;
 
 class TopicsController extends Controller
 {
     public function __construct()
     {
-        $aa = new SlugTranslateHandler();
-        $aa->translate("苹果");
-
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
 	public function index(Request $request, Topic $topic)
 	{
+
 		$topics = $topic->withOrder($request->order)
                         ->with('user', 'category')
                         ->paginate(30);
 		return view('topics.index', compact('topics'));
 	}
 
-    public function show(Topic $topic)
+    public function show(Topic $topic, Request $request)
     {
+        if ( ! empty($topic->slug) && $topic->slug != $request->slug) {
+            return redirect($topic->link(), 301);
+        }
         return view('topics.show', compact('topic'));
     }
 
@@ -47,7 +50,7 @@ class TopicsController extends Controller
         $topic->user_id = Auth::id();
         $topic->save();
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
+		return redirect()->to($topic->link())->with('message', 'Created successfully.');
 	}
 
 	public function edit(Topic $topic)
@@ -62,7 +65,7 @@ class TopicsController extends Controller
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+        return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
 	}
 
 	public function destroy(Topic $topic)
