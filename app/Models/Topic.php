@@ -32,7 +32,7 @@ class Topic extends Model
                 $query->recentReplied();
                 break;
         }
-    }
+      }
 
     public function scopeRecent($query){
         return $query->orderBy('created_at', 'desc');
@@ -44,5 +44,9 @@ class Topic extends Model
 
     public function link($param = []){
         return route('topics.show', array_merge([$this->id, $this->slug], $param));
+    }
+
+    public function replies(){
+        return $this->hasMany(Reply::class);
     }
 }
