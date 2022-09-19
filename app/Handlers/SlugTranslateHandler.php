@@ -4,6 +4,7 @@ namespace App\Handlers;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
+use Overtrue\Pinyin\Pinyin;
 
 class SlugTranslateHandler{
 
