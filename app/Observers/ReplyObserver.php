@@ -18,4 +18,9 @@ class ReplyObserver
     {
         //
     }
+
+    public function created(Reply $reply)
+    {
+        $reply->topic->increment('view_count', 1);
+    }
 }
