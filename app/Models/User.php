@@ -58,4 +58,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Reply::class);
     }
+
+    public function notify($instance){
+        dd(145);
+    }
 }
